@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Http\Controllers\Api\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Regional;
+use App\Models\User;
+use App\Repositories\RegionalRepository;
+use App\Repositories\StoreRepository;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+class StoresController extends Controller
+{
+    protected $storeRepository;
+    protected $regionalRepository;
+
+    public function __construct(StoreRepository $storeRepository, RegionalRepository $regionalRepository)
+    {
+        $this->storeRepository = $storeRepository;
+        $this->regionalRepository = $regionalRepository;
+    }
+    public function index(){
+        $data = $this->storeRepository->index();
+        return response()->json(['status'=> 'success','data'=> $data],200);
+    }
+    public function store(Request $request){
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string',
+            'regional_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json( $validator->errors(),500);
+        }
+        $regional = $this->regionalRepository->findById($request->regional_id);
+        $store = $this->storeRepository->create($regional,$request->all());
+        return response()->json(['status'=> 'success','data'=> $store],200);
+    }
+    public function getstores()
+    {
+    
+        $id = Auth::id();
+        $user = User::find($id);
+        $regional = $user->regional;
+        $response = $this->storeRepository->getStores($regional);
+        return response()->json(['status'=> 'success','data'=> $response],200);
+    }
+    public function show($id)
+    {
+        $response = $this->storeRepository->findById($id);
+        return response()->json(['status'=> 'success','data'=> $response],200);
+    }
+    public function destroy($id)
+    {
+        $user =$this->storeRepository->findById($id);
+        $response = $this->storeRepository->delete($user);
+        return response()->json(['status'=> 'success','data'=> $response],200);
+    }
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string',
+            'regional_id' => 'required',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json( $validator->errors(),500);
+        }
+        
+        $store = $this->storeRepository->findById($id);
+        $regional = $this->regionalRepository->findById($request->regional_id);
+        $response = $this->storeRepository->update($store,$regional,$request->all());
+        
+        return response()->json(['status'=> 'success','data'=> $response],200);
+    }
+}
