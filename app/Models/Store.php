@@ -10,6 +10,7 @@ class Store extends Model
     use HasFactory;
     protected $fillable = [
         'description',
+        'status'
     ];
     
     public function regional(){

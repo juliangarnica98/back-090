@@ -43,7 +43,16 @@ Route::group(['middleware' => 'auth:sanctum'], function ($router) {
     //ruta para consultar tiendas por regional para la creacion de usuarios
     Route::get("/getstores", [App\Http\Controllers\Api\Admin\StoresController::class,"getstores"]); 
     //ruta para traer  las preguntas segun el encabezado que se le pasa como parametro
-    Route::get("/getquestion/{id}", [App\Http\Controllers\Api\Admin\QuestionsController::class,"getData"]); 
+    Route::get("/getquestion/{id}", [App\Http\Controllers\Api\Admin\QuestionsController::class,"getData"]);
+    //ruta para traer regionales con status 1
+    Route::get("/regionals2", [App\Http\Controllers\Api\Admin\RegionalsController::class,"index2"]); 
+    //ruta para calcular semanas de creacion de usuario
+    Route::get("/semanas", [App\Http\Controllers\Api\Admin\AnswersController::class,"index"]); 
+    //ruta para registrar formulario
+    Route::post("/respuesta", [App\Http\Controllers\Api\Admin\AnswersController::class,"store"]);
+    //ruta para consultar respuestas de preguntas
+    Route::get("/getanswer/{id}", [App\Http\Controllers\Api\Admin\AnswersController::class,"show"]);
+
 });
 
 

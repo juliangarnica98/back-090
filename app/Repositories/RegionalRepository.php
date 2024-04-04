@@ -5,7 +5,11 @@ use App\Models\Regional;
 class RegionalRepository{
     public function index()
     {
-        return Regional::all();
+        return Regional::paginate(10);
+    }
+    public function index2()
+    {
+        return Regional::where('status',1)->paginate(10);
     }
     public function create(array $regionalData)
     {
@@ -23,5 +27,9 @@ class RegionalRepository{
     public function findById($id)
     {
         return Regional::findOrFail($id);
+    }
+    public function findByDescription($des)
+    {
+        return Regional::where('description',$des)->first();
     }
 }

@@ -10,6 +10,7 @@ class Regional extends Model
     use HasFactory;
     protected $fillable = [
         'description',
+        'status'
     ];
     public function stores(){
         return $this->hasMany(Store::class);

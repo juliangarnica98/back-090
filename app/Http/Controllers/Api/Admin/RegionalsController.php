@@ -24,17 +24,26 @@ class RegionalsController extends Controller
             'data' =>  $data,
         ],200);
     }
+    public function index2()
+    {
+        $data = $this->regionalData->index2();
+        return response()->json([
+            'status' => 'suceess',
+            'data' =>  $data,
+        ],200);
+    }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'description' => 'required'
+            'description' => 'required',
+           
             ]
         );
         if ($validator->fails()) {
             return response()->json($validator->errors(),500);
         }
-        return response()->json($validator->errors(),500);
+        // return response()->json($validator->errors(),500);
 
         $regional= $this->regionalData->create([
             'description'=> $request->description
@@ -60,7 +69,8 @@ class RegionalsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'description' => 'required'
+            'description' => 'required',
+            'status' => 'required'
             ]
         );
         if ($validator->fails()) {

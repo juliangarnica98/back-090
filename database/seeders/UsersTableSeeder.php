@@ -29,7 +29,7 @@ class UsersTableSeeder extends Seeder
                 'password' => '$2y$10$zXGHp4AnhtvU2SUBk7/b7OoBmYkt9EEBHFMT7sSaoAf7orUJXmHBq',
                 'status' => 1,
                 'remember_token' => NULL,
-                'store_id' => 3,
+                'store_id' => null,
                 'created_at' => '2024-01-09 21:51:47',
                 'updated_at' => '2024-01-09 21:51:47',
             ),

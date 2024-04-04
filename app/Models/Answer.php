@@ -9,7 +9,9 @@ class Answer extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'description',
+        'week',
+        'description_ans',
+        'description_que',
         'status',
     ];
     public function user()

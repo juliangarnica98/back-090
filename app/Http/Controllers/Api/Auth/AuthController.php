@@ -29,18 +29,29 @@ class AuthController extends Controller
         }
         if($request->store){
             $store = Store::find($request->store); 
+            $user = $store->user()->create([
+                'name' =>$request['name'],
+                'last_name' =>$request['last_name'],
+                'email' =>$request['email'],
+                'regional' =>$request['regional'],
+                'password' => bcrypt($request['password']),
+            ]);
+            $user->assignRole($request['role']);
+          
         }else{
-            $store = Store::find(1); 
+            
+            $user = User::create([
+                'name' =>$request['name'],
+                'last_name' =>$request['last_name'],
+                'email' =>$request['email'],
+                'regional' =>$request['regional'],
+                'password' => bcrypt($request['password']),
+                'store_id' => null,
+            ]);
+            $user->assignRole($request['role']);
+          
         }
         
-        $user = $store->user()->create([
-            'name' =>$request['name'],
-            'last_name' =>$request['last_name'],
-            'email' =>$request['email'],
-            'regional' =>$request['regional'],
-            'password' => bcrypt($request['password']),
-        ]);
-        $user->assignRole($request['role']);
         if ($user->hasRole('Admin')) {
             $rol = 'Admin';
         } elseif($user->hasRole('Generalist')) {
@@ -48,6 +59,7 @@ class AuthController extends Controller
         }else{
             $rol = 'Boss';
         }
+        
         return $this->makeToken($user,$rol);
 
 

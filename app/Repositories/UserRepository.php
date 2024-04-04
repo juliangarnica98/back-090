@@ -11,7 +11,7 @@ Class UserRepository
     public function index()
     {
         // return User::with('roles')->with('store')->get();
-        return User::with('roles')->whereHas('roles', function ($query) { return $query->where('name', '=', 'Generalist');})->with('store')->get();
+        return User::with('roles')->whereHas('roles', function ($query) { return $query->where('name', '=', 'Generalist');})->get();
     }
     public function index2()
     {
@@ -19,6 +19,7 @@ Class UserRepository
     }
     public function update(User $user,Store $store,array $userData)
     {
+        // return $store;
         $user->update([
             'name' =>$userData['name'],
             'last_name' =>$userData['last_name'],
@@ -26,6 +27,7 @@ Class UserRepository
             'password' => bcrypt($userData['password']),
         ]);
         $user->store()->associate($store);
+        $user->save();
         return $user;
         
     }

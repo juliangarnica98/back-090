@@ -24,8 +24,10 @@ class CreateUsersTable extends Migration
             $table->boolean('status')->default(1);
             $table->rememberToken();
 
-            $table->unsignedBigInteger('store_id')->unsigned();
-            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
+            // $table->foreignId('store_id')->nullable()->constrained('stores')->onDelete('cascade');
+            $table->foreignId('store_id')->nullable()->constrained("stores")->cascadeOnUpdate()->nullOnDelete();
+
+            
 
             $table->timestamps();
         });

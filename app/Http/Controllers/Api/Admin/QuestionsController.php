@@ -33,13 +33,13 @@ class QuestionsController extends Controller
         $validator = Validator::make($request->all(),[
             'description'=>'required',
             'week'=>'required|numeric',
-            'area_impacto'=>'required|string'
+            'area_impacto'=>'required'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(),500);
         }
         
-        $header = $this->headerData->findById($request->header_id);
+        $header = $this->headerData->findById($request->week);
         $data = $this->questionData->create( $header ,$request->all());
         return response()->json([
             'status'=>'success',
@@ -58,14 +58,13 @@ class QuestionsController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'description'=>'required',
-            'week'=>'required|numeric',
-            'area_impacto'=>'required|string'
+            'week'=>'required|numeric'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(),200);
         }
         $question = $this->questionData->findById($id);
-        $header = $this->headerData->findById($request->header_id);
+        $header = $this->headerData->findById($request->week);
         $data = $this->questionData->update($question,$header,$request->all());
         return response()->json([
             "status"=>"success",

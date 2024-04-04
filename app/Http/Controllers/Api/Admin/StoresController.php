@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Regional;
+use App\Models\Store;
 use App\Models\User;
 use App\Repositories\RegionalRepository;
 use App\Repositories\StoreRepository;
@@ -22,19 +23,21 @@ class StoresController extends Controller
         $this->regionalRepository = $regionalRepository;
     }
     public function index(){
-        $data = $this->storeRepository->index();
+        $user = User::find(Auth::id());
+        $regional = Regional::where('description',$user->regional)->first();
+        $data = $this->storeRepository->index($regional->id);
         return response()->json(['status'=> 'success','data'=> $data],200);
     }
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'description' => 'required|string',
-            'regional_id' => 'required',
+            'regional' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json( $validator->errors(),500);
         }
-        $regional = $this->regionalRepository->findById($request->regional_id);
+        $regional = $this->regionalRepository->findByDescription($request->regional);
         $store = $this->storeRepository->create($regional,$request->all());
         return response()->json(['status'=> 'success','data'=> $store],200);
     }
@@ -62,7 +65,6 @@ class StoresController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => 'required|string',
-            'regional_id' => 'required',
         ]);
         
         if ($validator->fails()) {
@@ -70,8 +72,7 @@ class StoresController extends Controller
         }
         
         $store = $this->storeRepository->findById($id);
-        $regional = $this->regionalRepository->findById($request->regional_id);
-        $response = $this->storeRepository->update($store,$regional,$request->all());
+        $response = $this->storeRepository->update($store,$request->all());
         
         return response()->json(['status'=> 'success','data'=> $response],200);
     }

@@ -7,7 +7,7 @@ use App\Models\Question;
 class QuestionRepository{
     public function index()
     {
-        return Question::with('header')->get();
+        return Question::with('header')->paginate(15);
     }
     public function create(Header $header,array $questionData)
     {
@@ -17,7 +17,8 @@ class QuestionRepository{
     public function update(Question $question, Header $header,array $questionData)
     {
         $question->update($questionData);
-        $question->regional()->associate($header);
+        $question->header()->associate($header);
+        $question->save();
         return $question;
     }
     public function delete(Question $question)
