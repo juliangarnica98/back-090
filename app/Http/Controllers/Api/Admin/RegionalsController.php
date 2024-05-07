@@ -36,12 +36,12 @@ class RegionalsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'description' => 'required',
+            'description' => 'required|unique:regionals',
            
             ]
         );
         if ($validator->fails()) {
-            return response()->json($validator->errors(),500);
+            return response()->json(['errors' => $validator->errors()] ,500);
         }
         // return response()->json($validator->errors(),500);
 
@@ -69,12 +69,12 @@ class RegionalsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'description' => 'required',
+            'description' => 'required|unique:regionals',
             'status' => 'required'
             ]
         );
         if ($validator->fails()) {
-            return response()->json($validator->errors(),500);
+            return response()->json(['errors' => $validator->errors()] ,500);
         }
         $regional = $this->regionalData->findById($id);
         $data = $this->regionalData->update($regional,$request->all());

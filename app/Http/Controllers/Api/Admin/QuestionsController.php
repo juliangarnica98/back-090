@@ -36,7 +36,7 @@ class QuestionsController extends Controller
             'area_impacto'=>'required'
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(),500);
+            return response()->json(['errors' => $validator->errors()] ,500);
         }
         
         $header = $this->headerData->findById($request->week);
@@ -61,7 +61,7 @@ class QuestionsController extends Controller
             'week'=>'required|numeric'
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(),200);
+            return response()->json(['errors' => $validator->errors()] ,500);
         }
         $question = $this->questionData->findById($id);
         $header = $this->headerData->findById($request->week);

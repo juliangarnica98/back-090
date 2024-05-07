@@ -35,7 +35,7 @@ class StoresController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json( $validator->errors(),500);
+            return response()->json(['errors' => $validator->errors()] ,500);
         }
         $regional = $this->regionalRepository->findByDescription($request->regional);
         $store = $this->storeRepository->create($regional,$request->all());
@@ -68,7 +68,7 @@ class StoresController extends Controller
         ]);
         
         if ($validator->fails()) {
-            return response()->json( $validator->errors(),500);
+            return response()->json(['errors' => $validator->errors()] ,500);
         }
         
         $store = $this->storeRepository->findById($id);

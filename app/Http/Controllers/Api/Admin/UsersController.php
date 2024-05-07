@@ -57,7 +57,7 @@ class UsersController extends Controller
         ]);
         
         if ($validator->fails()) {
-            return response()->json( $validator->errors(),500);
+            return response()->json(['errors' => $validator->errors()] ,500);
         }
         if($request->store){
             $store = $this->storeData->findById($request->store);
